@@ -6,6 +6,7 @@ import {
   Schema,
 } from "deno-slack-sdk/mod.ts";
 
+// Workflow 1 - CREATE FTO
 export const CreateFTOWorkflow = DefineWorkflow({
   callback_id: "create_fto",
   title: "Add FTO",
@@ -20,6 +21,7 @@ export const CreateFTOWorkflow = DefineWorkflow({
   },
 });
 
+// Workflow 1 - open form step
 const formData = CreateFTOWorkflow.addStep(
   Schema.slack.functions.OpenForm,
   {
@@ -30,11 +32,6 @@ const formData = CreateFTOWorkflow.addStep(
     fields: {
       required: ["manager", "start_date", "end_date"],
       elements: [
-        // {
-        //   name: "employee",
-        //   title: "Employee",
-        //   type: Schema.slack.types.user_id,
-        // },
         {
           name: "manager",
           title: "Manager",
@@ -60,6 +57,7 @@ const formData = CreateFTOWorkflow.addStep(
   },
 );
 
+// Workflow 1 - custom function definition
 export const SendManagerFTORequestFunction = DefineFunction({
   callback_id: "send_manager_fto",
   title: "Request FTO",
@@ -96,6 +94,7 @@ export const SendManagerFTORequestFunction = DefineFunction({
   },
 });
 
+// Workflow 1 - add custom function as a step of the workflow
 CreateFTOWorkflow.addStep(SendManagerFTORequestFunction, {
   employee: CreateFTOWorkflow.inputs.interactivity.interactor.id,
   manager: formData.outputs.fields.manager,
@@ -104,6 +103,7 @@ CreateFTOWorkflow.addStep(SendManagerFTORequestFunction, {
   reason: formData.outputs.fields.reason,
 });
 
+// Workflow 1, 2, 3 - datastore definition
 const FTORequestsDatastore = DefineDatastore({
   name: "fto_requests",
   primary_key: "id",
@@ -126,11 +126,85 @@ const FTORequestsDatastore = DefineDatastore({
   },
 });
 
+// Workflow 2
+export const CheckFTOWorkflow = DefineWorkflow({
+  callback_id: "check_fto",
+  title: "Check FTO",
+  description: "Check all FTO Requests for a user",
+  input_parameters: {
+    properties: {
+      interactivity: {
+        type: Schema.slack.types.interactivity,
+      },
+    },
+    required: ["interactivity"],
+  },
+});
+
+// Workflow 2 - open form step
+const CheckFTOformData = CheckFTOWorkflow.addStep(
+  Schema.slack.functions.OpenForm,
+  {
+    title: "Check FTO",
+    interactivity: CreateFTOWorkflow.inputs.interactivity,
+    submit_label: "Submit",
+    description: "See all of the FTO requests for a specific user",
+    fields: {
+      required: ["user"],
+      elements: [
+        {
+          name: "user",
+          title: "User",
+          type: Schema.slack.types.user_id,
+        },
+      ],
+    },
+  },
+);
+
+// Workflow 2 - custom function definition
+export const GetFTORequestsFunction = DefineFunction({
+  callback_id: "get_fto",
+  title: "Get FTO Requests",
+  description: "Get FTO Requests for a specified user",
+  source_file: "functions/get_fto_requests.ts",
+  input_parameters: {
+    properties: {
+      user: {
+        type: Schema.slack.types.user_id,
+        description: "The user requesting the time off",
+      },
+    },
+    required: ["user"],
+  },
+  output_parameters: {
+    properties: {
+      message: {
+        type: Schema.types.string,
+        description:
+          "The message containing all of the FTO Requests for the specified user",
+      },
+    },
+    required: ["message"],
+  },
+});
+
+// Workflow 2 - add custom function as a step of the workflow
+const checkFto = CheckFTOWorkflow.addStep(GetFTORequestsFunction, {
+  user: CheckFTOformData.outputs.fields.user,
+});
+
+// Workflow 2 - send DM to person who initiated workflow
+CheckFTOWorkflow.addStep(Schema.slack.functions.SendDm, {
+  user_id: CheckFTOWorkflow.inputs.interactivity.interactor.id,
+  message: checkFto.outputs.message,
+});
+
 export default Manifest({
   name: "approve_deny",
   description: "Send an FTO Request to your manager",
   icon: "assets/icon.png",
-  workflows: [CreateFTOWorkflow],
+  workflows: [CreateFTOWorkflow, CheckFTOWorkflow],
   datastores: [FTORequestsDatastore],
   outgoingDomains: [],
   botScopes: [
