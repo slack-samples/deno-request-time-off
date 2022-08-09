@@ -116,7 +116,7 @@ export const blockActions = ActionsRouter.addHandler(
       const primarykey = crypto.randomUUID();
 
       const put_response = await client.apps.datastore.put({
-        datastore: "fto_requests",
+        datastore: "fto_requests_db",
         item: {
           id: primarykey,
           employee: body.function_data.inputs.employee,

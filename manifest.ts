@@ -40,12 +40,12 @@ const formData = CreateFTOWorkflow.addStep(
         {
           name: "start_date",
           title: "Start Date",
-          type: Schema.slack.types.timestamp,
+          type: "slack#/types/date",
         },
         {
           name: "end_date",
           title: "End Date",
-          type: Schema.slack.types.timestamp,
+          type: "slack#/types/date",
         },
         {
           name: "reason",
@@ -74,11 +74,11 @@ export const SendManagerFTORequestFunction = DefineFunction({
         description: "The manager approving the time off request",
       },
       start_date: {
-        type: Schema.slack.types.timestamp,
+        type: "slack#/types/date",
         description: "What date the FTO will start",
       },
       end_date: {
-        type: Schema.slack.types.timestamp,
+        type: "slack#/types/date",
         description: "What date the FTO will end",
       },
       reason: {
@@ -105,7 +105,7 @@ CreateFTOWorkflow.addStep(SendManagerFTORequestFunction, {
 
 // Workflow 1, 2, 3 - datastore definition
 const FTORequestsDatastore = DefineDatastore({
-  name: "fto_requests",
+  name: "fto_requests_db",
   primary_key: "id",
   attributes: {
     id: {
@@ -118,10 +118,10 @@ const FTORequestsDatastore = DefineDatastore({
       type: Schema.slack.types.user_id,
     },
     start_date: {
-      type: Schema.slack.types.timestamp,
+      type: Schema.types.string,
     },
     end_date: {
-      type: Schema.slack.types.timestamp,
+      type: Schema.types.string,
     },
   },
 });

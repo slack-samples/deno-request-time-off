@@ -13,7 +13,7 @@ const getFtoRequests: SlackFunctionHandler<
   const client = SlackAPI(token, {});
 
   const queryResp = await client.apps.datastore.query({
-    datastore: "fto_requests",
+    datastore: "fto_requests_db",
     expression: "#employee = :user",
     expression_attributes: { "#employee": "employee" },
     expression_values: { ":user": inputs.user },
