@@ -20,7 +20,7 @@ const getFtoRequests: SlackFunctionHandler<
     limit: 100,
   });
   if (queryResp.ok) {
-    // A query is succesful even if not items are found.
+    // A query is successful even if not items are found.
     console.log(`Success! QUERY results: ${JSON.stringify(queryResp)}`);
 
     if (queryResp.items.length === 0) { // An empty items array means no records were found.
@@ -39,9 +39,9 @@ const getFtoRequests: SlackFunctionHandler<
   // TODO convert timestamps to actual dates
   for (let item = 0; item < queryResp.items.length; item++) {
     console.log(queryResp.items[item]);
-    msg += `\n * ${queryResp.items[item]["start_date"]} - ${
-      queryResp.items[item]["end_date"]
-    }`;
+    msg += `\n *Id:${queryResp.items[item]["id"]}, 
+      Start Date:${queryResp.items[item]["start_date"]}, 
+      End Date:${queryResp.items[item]["end_date"]}`;
   }
 
   return await {
