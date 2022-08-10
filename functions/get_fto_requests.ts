@@ -5,7 +5,7 @@ import { SlackAPI } from "deno-slack-api/mod.ts";
 const getFtoRequests: SlackFunctionHandler<
   typeof GetFTORequestsFunction.definition
 > = async (
-  { inputs, env, token },
+  { inputs, token },
 ) => {
   console.log("Get FTO Requests Function");
   console.log(`user: ${inputs.user}.`);

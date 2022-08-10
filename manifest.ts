@@ -201,8 +201,8 @@ CheckFTOWorkflow.addStep(Schema.slack.functions.SendDm, {
 });
 
 export default Manifest({
-  name: "approve_deny",
-  description: "Send an FTO Request to your manager",
+  name: "Take Your Time",
+  description: "Ask your manager for some time off",
   icon: "assets/icon.png",
   workflows: [CreateFTOWorkflow, CheckFTOWorkflow],
   datastores: [FTORequestsDatastore],
