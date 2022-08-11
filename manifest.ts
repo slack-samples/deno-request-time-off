@@ -26,7 +26,7 @@ export const CreateFTOWorkflow = DefineWorkflow({
 const formData = CreateFTOWorkflow.addStep(
   Schema.slack.functions.OpenForm,
   {
-    title: "Take Your Time",
+    title: "Waste Your Time",
     interactivity: CreateFTOWorkflow.inputs.interactivity,
     submit_label: "Submit",
     description: "Ask your manager for some time off",
@@ -61,6 +61,7 @@ const formData = CreateFTOWorkflow.addStep(
 
 // Workflow step 2: send approve/deny message to manager
 CreateFTOWorkflow.addStep(SendFTORequestToManagerFunction, {
+  interactivity: formData.outputs.interactivity, 
   employee: CreateFTOWorkflow.inputs.interactivity.interactor.id,
   manager: formData.outputs.fields.manager,
   start_date: formData.outputs.fields.start_date,
@@ -69,7 +70,7 @@ CreateFTOWorkflow.addStep(SendFTORequestToManagerFunction, {
 });
 
 export default Manifest({
-  name: "Take Your Time",
+  name: "Waste Your Time",
   description: "Ask your manager for some time off",
   icon: "assets/icon.png",
   workflows: [CreateFTOWorkflow],

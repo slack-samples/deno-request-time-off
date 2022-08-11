@@ -9,15 +9,60 @@ import { BlockActionsRouter } from "deno-slack-sdk/mod.ts";
 const sendMgrDM: SlackFunctionHandler<
   typeof SendFTORequestToManagerFunction.definition
 > = async (
-  { inputs, token },
+  params,
 ) => {
-  console.log(`employee: ${inputs.employee}.`);
-  console.log(`manager: ${inputs.manager}.`);
-  console.log(`start date: ${inputs.start_date}.`);
-  console.log(`end date: ${inputs.end_date}.`);
-  console.log(`reason: ${inputs.reason}.`);
+  console.log('hello?');
+  console.log(JSON.stringify(params, null, 2));
+  const { inputs, token } = params;
 
   const client = SlackAPI(token, {});
+
+  let viewResp = await client.views.open({
+    trigger_id: inputs.interactivity.interactivity_pointer,
+    view: {
+      "type": "modal",
+      "title": {
+        "type": "plain_text",
+        "text": "Modal title",
+      },
+      "blocks": [
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": "It's Block Kit...but _in a modal_",
+          },
+          "block_id": "section1",
+          "accessory": {
+            "type": "button",
+            "text": {
+              "type": "plain_text",
+              "text": "Click me",
+            },
+            "action_id": "button_abc",
+            "value": "Button value",
+            "style": "danger",
+          },
+        },
+      ],
+      "close": {
+        "type": "plain_text",
+        "text": "Cancel",
+      },
+      "submit": {
+        "type": "plain_text",
+        "text": "Save",
+      },
+      "private_metadata": "Shhhhhhhh",
+      "callback_id": "view_identifier_12",
+    },
+  });
+  if (!viewResp.ok) {
+    console.log(viewResp.error);
+  }
+  return {
+    completed: false,
+  };
 
   // Create a .. block .. of Block Kit elements composed of several header blocks
   // plus the interactive approve/deny buttons at the end
@@ -137,7 +182,7 @@ function timeOffRequestHeaderBlocks(inputs: any): any[] {
       type: "header",
       text: {
         type: "plain_text",
-        text: `A new time-off request has been submitted`,
+        text: `A new waste of time request has been submitted`,
       },
     },
     {
