@@ -16,6 +16,9 @@ export const CreateFTOWorkflow = DefineWorkflow({
       interactivity: {
         type: Schema.slack.types.interactivity,
       },
+      channel_id: {
+        type: Schema.slack.types.channel_id,
+      }
     },
     required: ["interactivity"],
   },
@@ -23,6 +26,7 @@ export const CreateFTOWorkflow = DefineWorkflow({
 
 // Workflow step 1: open a form to collect the user's manager, start and end dates
 // for time off and an optional reason.
+/*
 const formData = CreateFTOWorkflow.addStep(
   Schema.slack.functions.OpenForm,
   {
@@ -58,15 +62,19 @@ const formData = CreateFTOWorkflow.addStep(
   },
 );
 
-
+*/
 // Workflow step 2: send approve/deny message to manager
 CreateFTOWorkflow.addStep(SendFTORequestToManagerFunction, {
-  interactivity: formData.outputs.interactivity, 
+  interactivity: CreateFTOWorkflow.inputs.interactivity, 
+  channel_id: CreateFTOWorkflow.inputs.channel_id, 
+  //interactivity: formData.outputs.interactivity, 
+  /*
   employee: CreateFTOWorkflow.inputs.interactivity.interactor.id,
   manager: formData.outputs.fields.manager,
   start_date: formData.outputs.fields.start_date,
   end_date: formData.outputs.fields.end_date,
   reason: formData.outputs.fields.reason,
+  */
 });
 
 export default Manifest({

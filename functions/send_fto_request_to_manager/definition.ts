@@ -16,6 +16,10 @@ export const SendFTORequestToManagerFunction = DefineFunction({
       interactivity: {
         type: Schema.slack.types.interactivity,
       },
+      channel_id: {
+        type: Schema.slack.types.channel_id,
+      },
+      /*
       employee: {
         type: Schema.slack.types.user_id,
         description: "The user requesting the time off",
@@ -36,8 +40,9 @@ export const SendFTORequestToManagerFunction = DefineFunction({
         type: Schema.types.string,
         description: "The reason for the FTO request",
       },
+      */
     },
-    required: ["employee", "manager", "start_date", "end_date", "interactivity"],
+    required: [/*"employee", "manager", "start_date", "end_date",*/ "interactivity"],
   },
   output_parameters: {
     properties: {},

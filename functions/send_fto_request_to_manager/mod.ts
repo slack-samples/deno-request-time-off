@@ -18,6 +18,7 @@ const sendMgrDM: SlackFunctionHandler<
   const client = SlackAPI(token, {});
 
   let viewResp = await client.views.open({
+    channel_id: inputs.channel_id,
     trigger_id: inputs.interactivity.interactivity_pointer,
     view: {
       "type": "modal",
@@ -60,49 +61,6 @@ const sendMgrDM: SlackFunctionHandler<
   if (!viewResp.ok) {
     console.log(viewResp.error);
   }
-  return {
-    completed: false,
-  };
-
-  // Create a .. block .. of Block Kit elements composed of several header blocks
-  // plus the interactive approve/deny buttons at the end
-  const blocks = timeOffRequestHeaderBlocks(inputs).concat([{
-    "type": "actions",
-    "block_id": "approve-deny-buttons",
-    "elements": [
-      {
-        type: "button",
-        text: {
-          type: "plain_text",
-          text: "Approve",
-        },
-        action_id: "approve_request",
-        style: "primary",
-      },
-      {
-        type: "button",
-        text: {
-          type: "plain_text",
-          text: "Deny",
-        },
-        action_id: "deny_request",
-        style: "danger",
-      },
-    ],
-  }]);
-
-  // Send the message to the manager
-  const msgResponse = await client.chat.postMessage({
-    channel: inputs.manager,
-    blocks,
-  });
-
-  if (!msgResponse.ok) {
-    console.log('Error during request chat.postMessage!', msgResponse.error);
-  }
-
-  // IMPORTANT! Set `completed` to false in order to keep the interactivity
-  // points (the approve/deny buttons) "alive"
   return {
     completed: false,
   };
