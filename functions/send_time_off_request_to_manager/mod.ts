@@ -1,66 +1,60 @@
 import type { SlackFunctionHandler } from "deno-slack-sdk/types.ts";
-import { SendFTORequestToManagerFunction } from "./definition.ts";
+import { SendTimeOffRequestToManagerFunction } from "./definition.ts";
 import { SlackAPI } from "deno-slack-api/mod.ts";
 import { BlockActionsRouter } from "deno-slack-sdk/mod.ts";
+
+const APPROVE_ID = "approve_request";
+const DENY_ID = "deny_request";
 
 // Custom function that sends a message to the user's manager asking
 // for approval for the time off request. The message includes some Block Kit with two
 // interactive buttons: one to approve, and one to deny.
 const sendMgrDM: SlackFunctionHandler<
-  typeof SendFTORequestToManagerFunction.definition
-> = async (
-  params,
-) => {
-  console.log('hello?');
-  console.log(JSON.stringify(params, null, 2));
-  const { inputs, token } = params;
-
+  typeof SendTimeOffRequestToManagerFunction.definition
+> = async ({ inputs, token }) => {
+  console.log("Forwarding the following time off request:", inputs);
   const client = SlackAPI(token, {});
 
-  let viewResp = await client.views.open({
-    channel_id: inputs.channel_id,
-    trigger_id: inputs.interactivity.interactivity_pointer,
-    view: {
-      "type": "modal",
-      "title": {
-        "type": "plain_text",
-        "text": "Modal title",
-      },
-      "blocks": [
-        {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": "It's Block Kit...but _in a modal_",
-          },
-          "block_id": "section1",
-          "accessory": {
-            "type": "button",
-            "text": {
-              "type": "plain_text",
-              "text": "Click me",
-            },
-            "action_id": "button_abc",
-            "value": "Button value",
-            "style": "danger",
-          },
+  // Create a block of Block Kit elements composed of several header blocks
+  // plus the interactive approve/deny buttons at the end
+  const blocks = timeOffRequestHeaderBlocks(inputs).concat([{
+    "type": "actions",
+    "block_id": "approve-deny-buttons",
+    "elements": [
+      {
+        type: "button",
+        text: {
+          type: "plain_text",
+          text: "Approve",
         },
-      ],
-      "close": {
-        "type": "plain_text",
-        "text": "Cancel",
+        action_id: APPROVE_ID, // <-- important! we will differentiate between buttons using these IDs
+        style: "primary",
       },
-      "submit": {
-        "type": "plain_text",
-        "text": "Save",
+      {
+        type: "button",
+        text: {
+          type: "plain_text",
+          text: "Deny",
+        },
+        action_id: DENY_ID, // <-- important! we will differentiate between buttons using these IDs
+        style: "danger",
       },
-      "private_metadata": "Shhhhhhhh",
-      "callback_id": "view_identifier_12",
-    },
+    ],
+  }]);
+
+  // Send the message to the manager
+  const msgResponse = await client.chat.postMessage({
+    channel: inputs.manager,
+    blocks,
   });
-  if (!viewResp.ok) {
-    console.log(viewResp.error);
+
+  if (!msgResponse.ok) {
+    console.log('Error during request chat.postMessage!', msgResponse.error);
   }
+
+  // IMPORTANT! Set `completed` to false in order to keep the interactivity
+  // points (the approve/deny buttons) "alive"
+  // We will set the function's complete state in the button handlers below.
   return {
     completed: false,
   };
@@ -70,17 +64,17 @@ export default sendMgrDM;
 
 // Create an 'actions router' which is a helper utility to route interactions
 // with different interactive Block Kit elements (like buttons!)
-const ActionsRouter = BlockActionsRouter(SendFTORequestToManagerFunction);
+const ActionsRouter = BlockActionsRouter(SendTimeOffRequestToManagerFunction);
 
 export const blockActions = ActionsRouter.addHandler(
   // listen for interactions with components with the following action_ids
-  ["approve_request", "deny_request"],
+  [APPROVE_ID, DENY_ID],
   // interactions with the above components get handled by the function below
   async ({ action, body, token }) => {
     console.log("Incoming action handler invocation", action);
     const client = SlackAPI(token);
 
-    const approved = action.action_id === "approve_request";
+    const approved = action.action_id === APPROVE_ID;
 
     // Send manager's response as a message to employee
     const msgResponse = await client.chat.postMessage({
@@ -104,7 +98,9 @@ export const blockActions = ActionsRouter.addHandler(
       console.log('Error during requester update chat.postMessage!', msgResponse.error);
     }
 
-    // Update the manager's message to remove the buttons and reflect the approval state
+    // Update the manager's message to remove the buttons and reflect the approval
+    // state. Nice little touch to prevent further interactions with the buttons
+    // after one of them were clicked.
     const msgUpdate = await client.chat.update({
       channel: body.container.channel_id,
       ts: body.container.message_ts,
@@ -134,13 +130,17 @@ export const blockActions = ActionsRouter.addHandler(
   },
 );
 
+/**
+ * Based on user inputted data, assemble a Block Kit approval message for easy
+ * parsing by the approving manager.
+ */
 function timeOffRequestHeaderBlocks(inputs: any): any[] {
   return [
     {
       type: "header",
       text: {
         type: "plain_text",
-        text: `A new waste of time request has been submitted`,
+        text: `A new time-off request has been submitted`,
       },
     },
     {

@@ -1,87 +1,13 @@
-import {
-  DefineWorkflow,
-  Manifest,
-  Schema,
-} from "deno-slack-sdk/mod.ts";
-import { SendFTORequestToManagerFunction } from "./functions/send_fto_request_to_manager/definition.ts";
-
-// Shortcut Workflow to start a time off request
-// This will be composed of two steps
-export const CreateFTOWorkflow = DefineWorkflow({
-  callback_id: "create_fto",
-  title: "Add FTO",
-  description: "Create an FTO Request",
-  input_parameters: {
-    properties: {
-      interactivity: {
-        type: Schema.slack.types.interactivity,
-      },
-      channel_id: {
-        type: Schema.slack.types.channel_id,
-      }
-    },
-    required: ["interactivity"],
-  },
-});
-
-// Workflow step 1: open a form to collect the user's manager, start and end dates
-// for time off and an optional reason.
-/*
-const formData = CreateFTOWorkflow.addStep(
-  Schema.slack.functions.OpenForm,
-  {
-    title: "Waste Your Time",
-    interactivity: CreateFTOWorkflow.inputs.interactivity,
-    submit_label: "Submit",
-    description: "Ask your manager for some time off",
-    fields: {
-      required: ["manager", "start_date", "end_date"],
-      elements: [
-        {
-          name: "manager",
-          title: "Manager",
-          type: Schema.slack.types.user_id,
-        },
-        {
-          name: "start_date",
-          title: "Start Date",
-          type: "slack#/types/date",
-        },
-        {
-          name: "end_date",
-          title: "End Date",
-          type: "slack#/types/date",
-        },
-        {
-          name: "reason",
-          title: "Reason",
-          type: Schema.types.string,
-        },
-      ],
-    },
-  },
-);
-
-*/
-// Workflow step 2: send approve/deny message to manager
-CreateFTOWorkflow.addStep(SendFTORequestToManagerFunction, {
-  interactivity: CreateFTOWorkflow.inputs.interactivity, 
-  channel_id: CreateFTOWorkflow.inputs.channel_id, 
-  //interactivity: formData.outputs.interactivity, 
-  /*
-  employee: CreateFTOWorkflow.inputs.interactivity.interactor.id,
-  manager: formData.outputs.fields.manager,
-  start_date: formData.outputs.fields.start_date,
-  end_date: formData.outputs.fields.end_date,
-  reason: formData.outputs.fields.reason,
-  */
-});
+import { Manifest } from "deno-slack-sdk/mod.ts";
+import { CreateTimeOffRequestWorkflow } from "./workflows/CreateTimeOffRequestWorkflow.ts";
+import { SendTimeOffRequestToManagerFunction } from "./functions/send_time_off_request_to_manager/definition.ts";
 
 export default Manifest({
-  name: "Waste Your Time",
+  name: "Take Your Time",
   description: "Ask your manager for some time off",
   icon: "assets/icon.png",
-  workflows: [CreateFTOWorkflow],
+  workflows: [CreateTimeOffRequestWorkflow],
+  functions: [SendTimeOffRequestToManagerFunction],
   outgoingDomains: [],
   botScopes: [
     "commands",

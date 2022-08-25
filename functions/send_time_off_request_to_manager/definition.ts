@@ -3,23 +3,21 @@ import {
   Schema,
 } from "deno-slack-sdk/mod.ts";
 
-// Custom function that sends a message to the user's manager asking
-// for approval for the time off request. The message includes some Block Kit with two
-// interactive buttons: one to approve, and one to deny.
-export const SendFTORequestToManagerFunction = DefineFunction({
-  callback_id: "send_manager_fto",
+/**
+ * Custom function that sends a message to the user's manager asking for approval
+ * for the time off request. The message includes some Block Kit with two interactive
+ * buttons: one to approve, and one to deny.
+ */
+export const SendTimeOffRequestToManagerFunction = DefineFunction({
+  callback_id: "send_time_off_request_to_manager",
   title: "Request FTO",
   description: "Sends your manager an FTO Request to approve or deny",
-  source_file: "functions/send_fto_request_to_manager/mod.ts",
+  source_file: "functions/send_time_off_request_to_manager/mod.ts",
   input_parameters: {
     properties: {
       interactivity: {
         type: Schema.slack.types.interactivity,
       },
-      channel_id: {
-        type: Schema.slack.types.channel_id,
-      },
-      /*
       employee: {
         type: Schema.slack.types.user_id,
         description: "The user requesting the time off",
@@ -30,19 +28,18 @@ export const SendFTORequestToManagerFunction = DefineFunction({
       },
       start_date: {
         type: "slack#/types/date",
-        description: "What date the FTO will start",
+        description: "Time off start date",
       },
       end_date: {
         type: "slack#/types/date",
-        description: "What date the FTO will end",
+        description: "Time off end date",
       },
       reason: {
         type: Schema.types.string,
-        description: "The reason for the FTO request",
+        description: "The reason for the time off request",
       },
-      */
     },
-    required: [/*"employee", "manager", "start_date", "end_date",*/ "interactivity"],
+    required: ["employee", "manager", "start_date", "end_date", "interactivity"],
   },
   output_parameters: {
     properties: {},
