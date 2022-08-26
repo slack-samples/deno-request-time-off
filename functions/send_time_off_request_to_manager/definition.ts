@@ -1,7 +1,4 @@
-import {
-  DefineFunction,
-  Schema,
-} from "deno-slack-sdk/mod.ts";
+import { DefineFunction, Schema } from "deno-slack-sdk/mod.ts";
 
 /**
  * Custom function that sends a message to the user's manager asking for approval
@@ -39,7 +36,13 @@ export const SendTimeOffRequestToManagerFunction = DefineFunction({
         description: "The reason for the time off request",
       },
     },
-    required: ["employee", "manager", "start_date", "end_date", "interactivity"],
+    required: [
+      "employee",
+      "manager",
+      "start_date",
+      "end_date",
+      "interactivity",
+    ],
   },
   output_parameters: {
     properties: {},

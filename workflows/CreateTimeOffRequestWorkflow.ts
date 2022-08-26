@@ -9,7 +9,8 @@ import { SendTimeOffRequestToManagerFunction } from "../functions/send_time_off_
 export const CreateTimeOffRequestWorkflow = DefineWorkflow({
   callback_id: "create_time_off",
   title: "Request Time Off",
-  description: "Create a time off request and send it for approval to your manager",
+  description:
+    "Create a time off request and send it for approval to your manager",
   input_parameters: {
     properties: {
       interactivity: {
