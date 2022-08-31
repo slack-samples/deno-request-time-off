@@ -88,12 +88,12 @@ application. For quick testing, we recommend using the channel bookmarks bar to
 save the development and deployed application link triggers as separate
 bookmarks.
 
-## Overview
+## Project Structure
 
 For the best overview of the building blocks of Run-on-Slack applications, make
 sure to read through the new [Platform Overview][overview].
 
-### Manifest
+### `manifest.ts`
 
 The [Manifest][manifest] for your application describes the most important
 application information, such as its name, description, icon, the list of
@@ -113,19 +113,14 @@ down into [Built-in Functions][functions] (pre-existing bits of functionality
 provided by Slack that are accessible wrappers around popular [Slack APIs][api])
 and [Custom Functions][custom-func] (functions that you can author).
 
-#### Triggers
-
-This application contains a single link trigger stored in the `trigger.ts` file
-in the root.
-
-#### Workflows
-
-This application contains a single workflow stored under the `workflows/`
-folder.
-
 #### Functions
 
-This application's workflow is composed of two functions chained sequentially:
+[Functions][custom-func] are reusable building blocks that accept inputs, perform
+calculations and provide outputs.
+
+This project's functions are stored under the `./functions` directory.
+
+This application's [workflow](#workflows) is composed of two functions chained sequentially:
 
 1. The workflow uses the OpenForm [Built-in Function][functions] to collect data
    from the user that triggered the workflow.
@@ -133,12 +128,35 @@ This application's workflow is composed of two functions chained sequentially:
    [Custom Function][custom-func], called `SendTimeOffRequestToManagerFunction`.
    This function is stored under the `functions/` folder.
 
+#### Workflows
+
+A [Workflow][workflow] is a set of steps that are executed in order. Each step
+in a [Workflow][workflow] is a [Function](#functions). Similarly to functions,
+workflows can also optionally accept input and pass it further along to functions
+that make the workflow up.
+
+This application contains a single workflow stored under the `workflows/`
+folder.
+
+#### Triggers
+
+[Triggers][triggers] determine when [Workflows][workflow] are executed.
+[Triggers][triggers] describe a scenario in which a [Workflow][workflow] should
+be run. Examples include a button press, a specific schedule, or any existing
+[Slack Event][events]. A trigger is described by a JSON object, optionally stored
+in a file.
+
+This application contains a single [link trigger][link-trigger] stored in the
+`triggers/trigger.ts` file.
+
 [nextgen]: https://api.slack.com/future
 [overview]: https://api.slack.com/future/overview
 [quickstart]: https://api.slack.com/future/quickstart
 [triggers]: https://api.slack.com/future/triggers
+[link-trigger]: https://api.slack.com/future/triggers#link
 [workflow]: https://api.slack.com/future/workflows
 [functions]: https://api.slack.com/future/functions
 [custom-func]: https://api.slack.com/future/functions/custom
 [api]: https://api.slack.com/methods
 [manifest]: https://api.slack.com/future/manifest
+[events]: https://api.slack.com/events
