@@ -115,12 +115,13 @@ and [Custom Functions][custom-func] (functions that you can author).
 
 #### Functions
 
-[Functions][custom-func] are reusable building blocks that accept inputs, perform
-calculations and provide outputs.
+[Functions][custom-func] are reusable building blocks that accept inputs,
+perform calculations and provide outputs.
 
 This project's functions are stored under the `./functions` directory.
 
-This application's [workflow](#workflows) is composed of two functions chained sequentially:
+This application's [workflow](#workflows) is composed of two functions chained
+sequentially:
 
 1. The workflow uses the OpenForm [Built-in Function][functions] to collect data
    from the user that triggered the workflow.
@@ -132,8 +133,8 @@ This application's [workflow](#workflows) is composed of two functions chained s
 
 A [Workflow][workflow] is a set of steps that are executed in order. Each step
 in a [Workflow][workflow] is a [Function](#functions). Similarly to functions,
-workflows can also optionally accept input and pass it further along to functions
-that make the workflow up.
+workflows can also optionally accept input and pass it further along to
+functions that make the workflow up.
 
 This application contains a single workflow stored under the `workflows/`
 folder.
@@ -143,8 +144,8 @@ folder.
 [Triggers][triggers] determine when [Workflows][workflow] are executed.
 [Triggers][triggers] describe a scenario in which a [Workflow][workflow] should
 be run. Examples include a button press, a specific schedule, or any existing
-[Slack Event][events]. A trigger is described by a JSON object, optionally stored
-in a file.
+[Slack Event][events]. A trigger is described by a JSON object, optionally
+stored in a file.
 
 This application contains a single [link trigger][link-trigger] stored in the
 `triggers/trigger.ts` file.
