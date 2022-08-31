@@ -51,7 +51,7 @@ a [Trigger][triggers] - an entrypoint that users in your Slack workspace can
 begin interacting with the application. This can be done with a single command
 using the CLI:
 
-    slack triggers create --trigger-def ./trigger.ts
+    slack triggers create --trigger-def triggers/trigger.ts
 
 You will need to select the workspace you deployed your application to. Make
 sure you select the entry that doesn't have `(dev)` in it! You can deploy
