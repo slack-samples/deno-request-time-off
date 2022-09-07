@@ -80,7 +80,7 @@ instance of your application, we also need to create another [Trigger][triggers]
 for your application. Run the `triggers create` command, but this time select
 the workspace entry that reads `(dev)`:
 
-    slack triggers create --trigger-def ./trigger.ts
+    slack triggers create --trigger-def ./triggers/trigger.ts
 
 Once again, you'll be provided a URL for your link trigger. This is a separate
 trigger, and thus different URL and entrypoint to a different _instance_ of your
