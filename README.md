@@ -1,6 +1,6 @@
 # Run-on-Slack Deno Request Time Off Sample
 
-This repo contains a sample TypeScript project for use on Slack's
+This app contains a sample TypeScript project for use on Slack's
 [next-generation hosted platform][nextgen]. The project models a time off
 request workflow: a user starts the workflow and enters details for their time
 off request such as start and end dates, their manager, and optionally a reason
@@ -8,156 +8,165 @@ for their request. This request will get routed to their manager, who will
 receive a direct message from this application with the request details along
 with two buttons they can interact with to approve or deny the request.
 
-## Requirements
+**Guide Outline**:
 
-This application requires that your Slack workspace is enabled for the
-next-generation platform. Check out the [future platform homepage][nextgen] for
-details on how to get access.
+- [Supported Workflows](#supported-workflows)
+- [Setup](#setup)
+  - [Install the Slack CLI](#install-the-slack-cli)
+  - [Clone the Sample App](#clone-the-sample-app)
+  - [GitHub Access Token](#github-access-token)
+- [Create a Link Trigger](#create-a-link-trigger)
+- [Running Your Project Locally](#running-your-project-locally)
+- [Deploying Your App](#deploying-your-app)
+  - [Viewing Activity Logs](#viewing-activity-logs)
+- [Project Structure](#project-structure)
+- [Resources](#resources)
 
-You must also have the new Slack CLI installed. Check out the
-[Quickstart][quickstart] for details on how to install the CLI and authenticate
-with any of your Slack workspaces with it.
+---
 
-## Installation
+## Supported Workflows
 
-### Create Application
+- **Request time off**: Enter details for a time off request and route it to a manager for approval.
 
-Once you have the Slack CLI tool installed, create a new project based on this
-template by running:
+## Setup
 
-    slack create my-app -t slack-samples/deno-request-time-off
+Before getting started, make sure you have a development workspace where you
+have permissions to install apps. If you don’t have one set up, go ahead and
+[create one](https://slack.com/create).
 
-This will create a new Run-on-Slack deno project and base it off of this
-repository. It will also create a random application name, which the CLI will
-log out. `cd` into this directory.
+### Install the Slack CLI
 
-### Deploy Application
+To use this sample, you first need to install and configure the Slack CLI.
+Step-by-step instructions can be found in our
+[Quickstart Guide](https://api.slack.com/future/quickstart).
 
-One of the convenient aspects of our next-generation Run-on-Slack platform is
-that you don't have to host your own applications anymore. In order to take
-advantage of this capability, you need to deploy your application to a Slack
-workspace you previously authenticated with. Do so with the `deploy` command:
+### Clone the Sample App
 
-    slack deploy
+Start by cloning this repository:
 
-You'll be prompted to choose a Slack workspace to deploy to. If you don't see
-the workspace you are looking for, run `slack login` and follow the
-instructions.
+```zsh
+# Clone this project onto your machine
+$ slack create my-time-off-app -t slack-samples/deno-take-your-time
 
-### Create a Trigger
+# Change into this project directory
+$ cd my-time-off-app
+```
 
-The app is deployed, but how do we interact with it? For that, we need to create
-a [Trigger][triggers] - an entrypoint that users in your Slack workspace can
-begin interacting with the application. This can be done with a single command
-using the CLI:
+## Create a Link Trigger
 
-    slack triggers create --trigger-def triggers/trigger.ts
+[Triggers](https://api.slack.com/future/triggers) are what cause Workflows to
+run. These Triggers can be invoked by a user, or automatically as a response to
+an event within Slack.
 
-You will need to select the workspace you deployed your application to. Make
-sure you select the entry that doesn't have `(dev)` in it! You can deploy
-triggers for different _instances_ of your app - which we will cover shortly.
+A [Link Trigger](https://api.slack.com/future/triggers/link) is a type of
+Trigger that generates a **Shortcut URL** which, when posted in a channel or
+added as a bookmark, becomes a link. When clicked, the Link Trigger will run the
+associated Workflow.
 
-The CLI will output a URL for your new trigger: this is a _link_ trigger. Paste
-this into your Slack workspace, bookmark it in your channels, share it with your
-friends! Slack will unfurl link triggers and display a button.
+Link Triggers are _unique to each installed version of your app_. This means
+that Shortcut URLs will be different across each workspace, as well as between
+[locally run](#running-your-project-locally) and
+[deployed apps](#deploying-your-app). When creating a Trigger, you must select
+the Workspace that you'd like to create the Trigger in. Each Workspace has a
+development version (denoted by `(dev)`), as well as a deployed version.
 
-Click this button to kick off this application's [Workflow][workflow]!
+To create a Link Trigger for the "Request Time Off" Workflow, run the following
+command:
 
-### Run Application Locally
+```zsh
+$ slack trigger create --trigger-def triggers/trigger.ts
+```
 
-You can also run the application directly from your development machine. Do so
-with the `run` command:
+After selecting a Workspace, the output provided will include the Link Trigger
+Shortcut URL. Copy and paste this URL into a channel as a message, or add it as
+a bookmark in a channel of the Workspace you selected.
 
-    slack run
+**Note: this link won't run the Workflow until the app is either running locally
+or deployed!** Read on to learn how to run your app locally and eventually
+deploy it to Slack hosting.
 
-We've now deployed a development _instance_ of your application. This is handy
-to quickly iterate on changes to your app. Keep `slack run` running in one
-terminal window while you make changes to your application code in another
-window or editor (no restart of the `slack run` process required).
+## Running Your Project Locally
 
-Since the development instance of your application is separate from the deployed
-instance of your application, we also need to create another [Trigger][triggers]
-for your application. Run the `triggers create` command, but this time select
-the workspace entry that reads `(dev)`:
+While building your app, you can see your changes propagated to your workspace
+in real-time with `slack run`. In both the CLI and in Slack, you'll know an app
+is the development version if the name has the string `(dev)` appended.
 
-    slack triggers create --trigger-def ./triggers/trigger.ts
+```zsh
+# Run app locally
+$ slack run
 
-Once again, you'll be provided a URL for your link trigger. This is a separate
-trigger, and thus different URL and entrypoint to a different _instance_ of your
-application. For quick testing, we recommend using the channel bookmarks bar to
-save the development and deployed application link triggers as separate
-bookmarks.
+Connected, awaiting events
+```
+
+Once running, click the
+[previously created Shortcut URL](#create-a-link-trigger) associated with the
+`(dev)` version of your app. This should start a Workflow that opens a form used
+to collect data around your time off request!
+
+To stop running locally, press `<CTRL> + C` to end the process.
+
+## Deploying Your App
+
+Once you're done with development, you can deploy the production version of your
+app to Slack hosting using `slack deploy`:
+
+```zsh
+$ slack deploy
+```
+
+After deploying, [create a new Link Trigger](#create-a-link-trigger) for the
+production version of your app (not appended with `(dev)`). Once the Trigger is
+invoked, the Workflow should run just as it did in when developing locally.
+
+### Viewing Activity Logs
+
+Activity logs for the production instance of your application can be viewed with
+the `slack activity` command:
+
+```zsh
+$ slack activity
+```
 
 ## Project Structure
 
-For the best overview of the building blocks of Run-on-Slack applications, make
-sure to read through the new [Platform Overview][overview].
-
 ### `manifest.ts`
 
-The [Manifest][manifest] for your application describes the most important
-application information, such as its name, description, icon, the list of
-[Workflows][workflow] it provides as well as all of its [Functions][functions]
-(among many other things). Make sure to read through the full
-[Manifest][manifest] documentation!
+The [app manifest](https://api.slack.com/future/manifest) contains the app's
+configuration. This file defines attributes like app name and description.
 
-In this project, the manifest is stored in the `manifest.ts` file in the root.
+### `slack.json`
 
-### Constructs
+Used by the CLI to interact with the project's SDK dependencies. It contains
+script hooks that are executed by the CLI and implemented by the SDK.
 
-> Trigger => Workflow => Function
+### `/functions`
 
-The core constructs of our next-generation platform are [Triggers][triggers],
-[Workflows][workflow], and [Functions][functions]. Functions furthermore break
-down into [Built-in Functions][functions] (pre-existing bits of functionality
-provided by Slack that are accessible wrappers around popular [Slack APIs][api])
-and [Custom Functions][custom-func] (functions that you can author).
+[Functions](https://api.slack.com/future/functions) are reusable building blocks
+of automation that accept inputs, perform calculations, and provide outputs.
+Functions can be used independently or as steps in Workflows.
 
-#### Functions
+### `/workflows`
 
-[Functions][custom-func] are reusable building blocks that accept inputs,
-perform calculations and provide outputs.
+A [Workflow](https://api.slack.com/future/workflows) is a set of steps that are
+executed in order. Each step in a Workflow is a function.
 
-This project's functions are stored under the `./functions` directory.
+Workflows can be configured to run without user input or they can collect input
+by beginning with a [form](https://api.slack.com/future/forms) before continuing
+to the next step.
 
-This application's [workflow](#workflows) is composed of two functions chained
-sequentially:
+### `/triggers`
 
-1. The workflow uses the OpenForm [Built-in Function][functions] to collect data
-   from the user that triggered the workflow.
-2. Form data is then passed to this application's
-   [Custom Function][custom-func], called `SendTimeOffRequestToManagerFunction`.
-   This function is stored under the `functions/` folder.
+[Triggers](https://api.slack.com/future/triggers) determine when Workflows are
+executed. A trigger file describes a scenario in which a workflow should be run,
+such as a user pressing a button or when a specific event occurs.
 
-#### Workflows
+## Resources
 
-A [Workflow][workflow] is a set of steps that are executed in order. Each step
-in a [Workflow][workflow] is a [Function](#functions). Similarly to functions,
-workflows can also optionally accept input and pass it further along to
-functions that make the workflow up.
+To learn more about developing with the CLI, you can visit the following guides:
 
-This application contains a single workflow stored under the `workflows/`
-folder.
+- [Creating a new app with the CLI](https://api.slack.com/future/create)
+- [Configuring your app](https://api.slack.com/future/manifest)
+- [Developing locally](https://api.slack.com/future/run)
 
-#### Triggers
-
-[Triggers][triggers] determine when [Workflows][workflow] are executed.
-[Triggers][triggers] describe a scenario in which a [Workflow][workflow] should
-be run. Examples include a button press, a specific schedule, or any existing
-[Slack Event][events]. A trigger is described by a JSON object, optionally
-stored in a file.
-
-This application contains a single [link trigger][link-trigger] stored in the
-`triggers/trigger.ts` file.
-
-[nextgen]: https://api.slack.com/future
-[overview]: https://api.slack.com/future/overview
-[quickstart]: https://api.slack.com/future/quickstart
-[triggers]: https://api.slack.com/future/triggers
-[link-trigger]: https://api.slack.com/future/triggers#link
-[workflow]: https://api.slack.com/future/workflows
-[functions]: https://api.slack.com/future/functions
-[custom-func]: https://api.slack.com/future/functions/custom
-[api]: https://api.slack.com/methods
-[manifest]: https://api.slack.com/future/manifest
-[events]: https://api.slack.com/events
+To view all documentation and guides available, visit the
+[Overview page](https://api.slack.com/future/overview).

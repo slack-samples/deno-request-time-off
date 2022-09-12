@@ -7,8 +7,8 @@ import { DefineFunction, Schema } from "deno-slack-sdk/mod.ts";
  */
 export const SendTimeOffRequestToManagerFunction = DefineFunction({
   callback_id: "send_time_off_request_to_manager",
-  title: "Request FTO",
-  description: "Sends your manager an FTO Request to approve or deny",
+  title: "Request Time Off",
+  description: "Sends your manager a time off request to approve or deny",
   source_file: "functions/send_time_off_request_to_manager/mod.ts",
   input_parameters: {
     properties: {
