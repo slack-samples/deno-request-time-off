@@ -13,7 +13,6 @@ request.
 - [Setup](#setup)
   - [Install the Slack CLI](#install-the-slack-cli)
   - [Clone the Sample App](#clone-the-sample-app)
-  - [GitHub Access Token](#github-access-token)
 - [Create a Link Trigger](#create-a-link-trigger)
 - [Running Your Project Locally](#running-your-project-locally)
 - [Deploying Your App](#deploying-your-app)
