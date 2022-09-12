@@ -60,8 +60,8 @@ export default SlackFunction(
       completed: false,
     };
   },
-// Create an 'actions router' which is a helper utility to route interactions
-// with different interactive Block Kit elements (like buttons!)
+  // Create an 'actions router' which is a helper utility to route interactions
+  // with different interactive Block Kit elements (like buttons!)
 ).addBlockActionsHandler(
   // listen for interactions with components with the following action_ids
   [APPROVE_ID, DENY_ID],

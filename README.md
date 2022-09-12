@@ -1,12 +1,11 @@
 # Run-on-Slack Deno Request Time Off Sample
 
 This app contains a sample TypeScript project for use on Slack's
-[next-generation hosted platform][nextgen]. The project models a time off
-request workflow: a user starts the workflow and enters details for their time
-off request such as start and end dates, their manager, and optionally a reason
-for their request. This request will get routed to their manager, who will
-receive a direct message from this application with the request details along
-with two buttons they can interact with to approve or deny the request.
+[next-generation hosted platform](https://api.slack.com/future). The project
+models a time off request workflow. This request will get routed to their
+manager, who receives a direct message from this application with the request
+details along with two buttons they can interact with to approve or deny the
+request.
 
 **Guide Outline**:
 
@@ -26,7 +25,8 @@ with two buttons they can interact with to approve or deny the request.
 
 ## Supported Workflows
 
-- **Request time off**: Enter details for a time off request and route it to a manager for approval.
+- **Request time off**: Enter details for a time off request and route it to a
+  manager for approval.
 
 ## Setup
 
@@ -46,7 +46,7 @@ Start by cloning this repository:
 
 ```zsh
 # Clone this project onto your machine
-$ slack create my-time-off-app -t slack-samples/deno-take-your-time
+$ slack create my-time-off-app -t slack-samples/deno-request-time-off
 
 # Change into this project directory
 $ cd my-time-off-app

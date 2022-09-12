@@ -4,7 +4,9 @@ import { BlockActionHandler } from "deno-slack-sdk/types.ts";
 import { APPROVE_ID } from "./constants.ts";
 import timeOffRequestHeaderBlocks from "./blocks.ts";
 
-const block_actions: BlockActionHandler<typeof SendTimeOffRequestToManagerFunction.definition> = async function ({ action, body, token }) {
+const block_actions: BlockActionHandler<
+  typeof SendTimeOffRequestToManagerFunction.definition
+> = async function ({ action, body, token }) {
   console.log("Incoming action handler invocation", action);
   const client = SlackAPI(token);
 
@@ -51,9 +53,7 @@ const block_actions: BlockActionHandler<typeof SendTimeOffRequestToManagerFuncti
         elements: [
           {
             type: "mrkdwn",
-            text: `${
-              approved ? " :white_check_mark: Approved" : ":x: Denied"
-            }`,
+            text: `${approved ? " :white_check_mark: Approved" : ":x: Denied"}`,
           },
         ],
       },
@@ -69,6 +69,6 @@ const block_actions: BlockActionHandler<typeof SendTimeOffRequestToManagerFuncti
     function_execution_id: body.function_data.execution_id,
     outputs: {},
   });
-}
+};
 
 export default block_actions;
