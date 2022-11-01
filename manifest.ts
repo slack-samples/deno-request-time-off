@@ -5,7 +5,7 @@ import { SendTimeOffRequestToManagerFunction } from "./functions/send_time_off_r
 export default Manifest({
   name: "Request Time Off",
   description: "Ask your manager for some time off",
-  icon: "assets/icon.png",
+  icon: "assets/default_new_app_icon.png",
   workflows: [CreateTimeOffRequestWorkflow],
   functions: [SendTimeOffRequestToManagerFunction],
   outgoingDomains: [],
