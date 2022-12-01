@@ -1,5 +1,4 @@
 import { SendTimeOffRequestToManagerFunction } from "./definition.ts";
-import { SlackAPI } from "deno-slack-api/mod.ts";
 import { SlackFunction } from "deno-slack-sdk/mod.ts";
 import BlockActionHandler from "./block_actions.ts";
 import { APPROVE_ID, DENY_ID } from "./constants.ts";
@@ -10,9 +9,8 @@ import timeOffRequestHeaderBlocks from "./blocks.ts";
 // interactive buttons: one to approve, and one to deny.
 export default SlackFunction(
   SendTimeOffRequestToManagerFunction,
-  async ({ inputs, token }) => {
+  async ({ inputs, client }) => {
     console.log("Forwarding the following time off request:", inputs);
-    const client = SlackAPI(token, {});
 
     // Create a block of Block Kit elements composed of several header blocks
     // plus the interactive approve/deny buttons at the end
