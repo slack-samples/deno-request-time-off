@@ -1,6 +1,7 @@
 import * as mf from "https://deno.land/x/mock_fetch@0.3.0/mod.ts";
 import handler from "./block_actions.ts";
 import { APPROVE_ID } from "./constants.ts";
+import { SlackAPI } from "deno-slack-api/mod.ts";
 
 // Replaces globalThis.fetch with the mocked copy
 mf.install();
@@ -73,6 +74,7 @@ Deno.test("SendTimeOffRequestToManagerFunction runs successfully", async () => {
     },
     env: { LOG_LEVEL: "ERROR" },
     token: "valid-token",
+    client: SlackAPI("valid-token", {}),
     // deno-lint-ignore no-explicit-any
   } as any;
   await handler(context);
