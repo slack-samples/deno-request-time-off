@@ -1,1 +1,11 @@
-{}
+{
+  "apps": {
+    "bill-at-tools": {
+      "name": "bill-at-tools",
+      "app_id": "A04L5PV8H7G",
+      "team_id": "T03K9901Q6A",
+      "IsDev": false
+    }
+  },
+  "default": "bill-at-tools"
+}
