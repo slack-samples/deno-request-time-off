@@ -29,4 +29,4 @@ jobs:
         run: deno test --allow-none
 
       - name: Run type check
-        run: deno check *.ts && deno check **/*.ts
+        run: deno check *.ts && deno check **/*.ts && deno check **/**/*.ts
