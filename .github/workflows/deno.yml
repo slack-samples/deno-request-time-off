@@ -25,5 +25,9 @@ jobs:
 
       - name: Run linter
         run: deno lint
+
       - name: Run tests
-        run: deno test --allow-none
+        run: deno task test
+
+      - name: Run type check
+        run: deno check *.ts && deno check **/*.ts && deno check **/**/*.ts
