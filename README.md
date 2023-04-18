@@ -1,11 +1,11 @@
 # Run-on-Slack Deno Request Time Off Sample
 
 This app contains a sample TypeScript project for use on Slack's
-[next-generation hosted platform](https://api.slack.com/future). The project
-models a time off request workflow. This request will get routed to their
-manager, who receives a direct message from this application with the request
-details along with two buttons they can interact with to approve or deny the
-request.
+[next-generation platform](https://api.slack.com/future). The project models a
+time off request workflow. Users can start the workflow and create the request
+by clicking a link trigger that. This request will get routed to their manager,
+who receives a direct message from this application with the request details
+along with two buttons they can interact with to approve or deny the request.
 
 **Guide Outline**:
 
@@ -13,8 +13,8 @@ request.
 - [Setup](#setup)
   - [Install the Slack CLI](#install-the-slack-cli)
   - [Clone the Sample App](#clone-the-sample-app)
-- [Create a Link Trigger](#create-a-link-trigger)
 - [Running Your Project Locally](#running-your-project-locally)
+- [Create a Link Trigger](#create-a-link-trigger)
 - [Deploying Your App](#deploying-your-app)
   - [Viewing Activity Logs](#viewing-activity-logs)
 - [Project Structure](#project-structure)
@@ -52,44 +52,11 @@ $ slack create my-time-off-app -t slack-samples/deno-request-time-off
 $ cd my-time-off-app
 ```
 
-## Create a Link Trigger
-
-[Triggers](https://api.slack.com/future/triggers) are what cause Workflows to
-run. These Triggers can be invoked by a user, or automatically as a response to
-an event within Slack.
-
-A [Link Trigger](https://api.slack.com/future/triggers/link) is a type of
-Trigger that generates a **Shortcut URL** which, when posted in a channel or
-added as a bookmark, becomes a link. When clicked, the Link Trigger will run the
-associated Workflow.
-
-Link Triggers are _unique to each installed version of your app_. This means
-that Shortcut URLs will be different across each workspace, as well as between
-[locally run](#running-your-project-locally) and
-[deployed apps](#deploying-your-app). When creating a Trigger, you must select
-the Workspace that you'd like to create the Trigger in. Each Workspace has a
-development version (denoted by `(dev)`), as well as a deployed version.
-
-To create a Link Trigger for the "Request Time Off" Workflow, run the following
-command:
-
-```zsh
-$ slack trigger create --trigger-def triggers/trigger.ts
-```
-
-After selecting a Workspace, the output provided will include the Link Trigger
-Shortcut URL. Copy and paste this URL into a channel as a message, or add it as
-a bookmark in a channel of the Workspace you selected.
-
-**Note: this link won't run the Workflow until the app is either running locally
-or deployed!** Read on to learn how to run your app locally and eventually
-deploy it to Slack hosting.
-
 ## Running Your Project Locally
 
 While building your app, you can see your changes propagated to your workspace
 in real-time with `slack run`. In both the CLI and in Slack, you'll know an app
-is the development version if the name has the string `(dev)` appended.
+is the development version if the name has the string `(local)` appended.
 
 ```zsh
 # Run app locally
@@ -98,29 +65,63 @@ $ slack run
 Connected, awaiting events
 ```
 
-Once running, click the
-[previously created Shortcut URL](#create-a-link-trigger) associated with the
-`(dev)` version of your app. This should start a Workflow that opens a form used
-to collect data around your time off request!
+When you `slack run` or `slack deploy` your project, the CLI will prompt you to
+create a new trigger if one does not exist for your app and one is found in the
+`/triggers` directory. For more information on triggers, read the next section!
 
 To stop running locally, press `<CTRL> + C` to end the process.
 
+## Create a Link Trigger
+
+[Triggers](https://api.slack.com/future/triggers) are what cause workflows to
+run. These triggers can be invoked by a user, or automatically as a response to
+an event within Slack.
+
+A [Link Trigger](https://api.slack.com/future/triggers/link) is a type of
+trigger that generates a **Shortcut URL** which, when posted in a channel or
+added as a bookmark, becomes a link. When clicked, the link trigger will run the
+associated Workflow.
+
+Link triggers are _unique to each installed version of your app_. This means
+that Shortcut URLs will be different across each workspace, as well as between
+[locally run](#running-your-project-locally) and
+[deployed apps](#deploying-your-app). When creating a trigger, you must select
+the workspace that you'd like to create the trigger in. Each workspace has a
+development version (denoted by `(local)`), as well as a deployed version.
+
+To manually create a link trigger for the "Request Time Off" workflow, run the
+following command:
+
+```zsh
+$ slack trigger create --trigger-def triggers/trigger.ts
+```
+
+After selecting a workspace and the local or deployed app instance, the output
+provided will include the link trigger shortcut URL. Copy and paste this URL
+into a channel as a message, or add it as a bookmark in a channel of the
+workspace you selected.
+
+**Note: this link won't run the workflow until the app is either running locally
+or deployed!** Read on to learn how to run your app locally and eventually
+deploy it to Slack.
+
 ## Deploying Your App
 
-Once you're done with development, you can deploy the production version of your
-app to Slack hosting using `slack deploy`:
+Once you're done with developing locally, you can deploy the production version
+of your app to Slack using `slack deploy`:
 
 ```zsh
 $ slack deploy
 ```
 
-After deploying, [create a new Link Trigger](#create-a-link-trigger) for the
-production version of your app (not appended with `(dev)`). Once the Trigger is
-invoked, the Workflow should run just as it did in when developing locally.
+After deploying, if a trigger does not already exist,
+[create a new link trigger](#create-a-link-trigger) for the deployed version of
+your app (not appended with `(local)`). Once the trigger is invoked, the
+workflow should run just as it did in when developing locally.
 
 ### Viewing Activity Logs
 
-Activity logs for the production instance of your application can be viewed with
+Activity logs for the deployed instance of your application can be viewed with
 the `slack activity` command:
 
 ```zsh
@@ -143,12 +144,12 @@ script hooks that are executed by the CLI and implemented by the SDK.
 
 [Functions](https://api.slack.com/future/functions) are reusable building blocks
 of automation that accept inputs, perform calculations, and provide outputs.
-Functions can be used independently or as steps in Workflows.
+Functions can be used independently or as steps in workflows.
 
 ### `/workflows`
 
 A [Workflow](https://api.slack.com/future/workflows) is a set of steps that are
-executed in order. Each step in a Workflow is a function.
+executed in order. Each step in a workflow is a function.
 
 Workflows can be configured to run without user input or they can collect input
 by beginning with a [form](https://api.slack.com/future/forms) before continuing
@@ -156,7 +157,7 @@ to the next step.
 
 ### `/triggers`
 
-[Triggers](https://api.slack.com/future/triggers) determine when Workflows are
+[Triggers](https://api.slack.com/future/triggers) determine when workflows are
 executed. A trigger file describes a scenario in which a workflow should be run,
 such as a user pressing a button or when a specific event occurs.
 

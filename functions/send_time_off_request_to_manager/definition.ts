@@ -1,5 +1,4 @@
 import { DefineFunction, Schema } from "deno-slack-sdk/mod.ts";
-
 /**
  * Custom function that sends a message to the user's manager asking for approval
  * for the time off request. The message includes some Block Kit with two interactive
@@ -24,11 +23,11 @@ export const SendTimeOffRequestToManagerFunction = DefineFunction({
         description: "The manager approving the time off request",
       },
       start_date: {
-        type: "slack#/types/date",
+        type: Schema.slack.types.date,
         description: "Time off start date",
       },
       end_date: {
-        type: "slack#/types/date",
+        type: Schema.slack.types.date,
         description: "Time off end date",
       },
       reason: {

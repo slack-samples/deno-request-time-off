@@ -1,4 +1,23 @@
 {
+  "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
+  "fmt": {
+    "files": {
+      "include": ["functions", "triggers", "workflows", "README.md", "manifest.ts"]
+    },
+    "options": {
+      "semiColons": true,
+      "indentWidth": 2,
+      "lineWidth": 80,
+      "proseWrap": "always",
+      "singleQuote": false,
+      "useTabs": false
+    }
+  },
+  "lint": {
+    "files": {
+      "include": ["functions", "triggers", "workflows", "manifest.ts"]
+    }
+  },
   "importMap": "import_map.json",
   "tasks": {
     "test": "deno fmt --check && deno lint && deno test --allow-read --allow-none"

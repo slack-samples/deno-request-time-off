@@ -57,12 +57,13 @@ export default SlackFunction(
       completed: false,
     };
   },
-  // Create an 'actions router' which is a helper utility to route interactions
-  // with different interactive Block Kit elements (like buttons!)
+  // Create an 'actions handler', which is a function that will be invoked
+  // when specific interactive Block Kit elements (like buttons!) are interacted
+  // with.
 ).addBlockActionsHandler(
   // listen for interactions with components with the following action_ids
   [APPROVE_ID, DENY_ID],
-  // interactions with the above components get handled by the function below
+  // interactions with the above two action_ids get handled by the function below
   async function ({ action, body, client }) {
     console.log("Incoming action handler invocation", action);
 
