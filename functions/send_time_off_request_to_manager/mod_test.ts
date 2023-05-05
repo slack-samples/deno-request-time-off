@@ -38,13 +38,6 @@ Deno.test("SendTimeOffRequestToManagerFunction runs successfully", async () => {
         secret: "NDE0NTIxNDg....",
       },
     },
-    "interactivity.interactor": {
-      "id": "U33333",
-      "secret": "NDE0NTIxNDg....",
-    },
-    "interactivity.interactor.id": "U03E94MK0",
-    "interactivity.interactor.secret": "NDE0NTIxNDg....",
-    "interactivity.interactivity_pointer": "111.222.b79....",
   };
   const env = { LOG_LEVEL: "ERROR" };
   const result = await handler(createContext({ inputs, env }));
