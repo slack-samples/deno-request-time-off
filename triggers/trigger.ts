@@ -1,4 +1,5 @@
 import { Trigger } from "deno-slack-sdk/types.ts";
+import { TriggerContextData } from "deno-slack-api/mod.ts";
 
 const trigger: Trigger = {
   type: "shortcut",
@@ -7,7 +8,7 @@ const trigger: Trigger = {
   workflow: "#/workflows/create_time_off",
   inputs: {
     interactivity: {
-      value: "{{data.interactivity}}",
+      value: TriggerContextData.Shortcut.interactivity,
     },
   },
 };
