@@ -2,7 +2,7 @@
   "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
   "fmt": {
     "files": {
-      "include": ["functions", "triggers", "workflows", "README.md", "manifest.ts"]
+      "include": ["README.md", "datastores", "external_auth", "functions", "manifest.ts", "triggers", "types", "views", "workflows"]
     },
     "options": {
       "semiColons": true,
@@ -13,12 +13,13 @@
       "useTabs": false
     }
   },
+  "importMap": "import_map.json",
   "lint": {
     "files": {
-      "include": ["functions", "triggers", "workflows", "manifest.ts"]
+      "include": ["datastores", "external_auth", "functions", "manifest.ts", "triggers", "types", "views", "workflows"]
     }
   },
-  "importMap": "import_map.json",
+  "lock": false,
   "tasks": {
     "test": "deno fmt --check && deno lint && deno test --allow-read --allow-none"
   },
