@@ -1,27 +1,33 @@
 {
   "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
   "fmt": {
-    "files": {
-      "include": ["README.md", "datastores", "external_auth", "functions", "manifest.ts", "triggers", "types", "views", "workflows"]
-    },
-    "options": {
-      "semiColons": true,
-      "indentWidth": 2,
-      "lineWidth": 80,
-      "proseWrap": "always",
-      "singleQuote": false,
-      "useTabs": false
-    }
+    "include": [
+      "README.md",
+      "datastores",
+      "external_auth",
+      "functions",
+      "manifest.ts",
+      "triggers",
+      "types",
+      "views",
+      "workflows"
+    ]
   },
   "importMap": "import_map.json",
   "lint": {
-    "files": {
-      "include": ["datastores", "external_auth", "functions", "manifest.ts", "triggers", "types", "views", "workflows"]
-    }
+    "include": [
+      "datastores",
+      "external_auth",
+      "functions",
+      "manifest.ts",
+      "triggers",
+      "types",
+      "views",
+      "workflows"
+    ]
   },
   "lock": false,
   "tasks": {
     "test": "deno fmt --check && deno lint && deno test --allow-read --allow-none"
-  },
-  "lock": false
+  }
 }
