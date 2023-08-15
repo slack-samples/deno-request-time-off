@@ -31,7 +31,7 @@ export const SendTimeOffRequestToManagerFunction = DefineFunction({
         description: "Time off end date",
       },
       reason: {
-        type: Schema.types.string,
+        type: Schema.slack.types.rich_text,
         description: "The reason for the time off request",
       },
     },

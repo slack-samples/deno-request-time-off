@@ -30,7 +30,7 @@ export default function timeOffRequestHeaderBlocks(inputs: any): any[] {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `*Reason:* ${inputs.reason ? inputs.reason : "N/A"}`,
+        text: "*Reason:*",
       },
     },
   ];

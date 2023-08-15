@@ -13,7 +13,7 @@ export default SlackFunction(
 
     // Create a block of Block Kit elements composed of several header blocks
     // plus the interactive approve/deny buttons at the end
-    const blocks = timeOffRequestHeaderBlocks(inputs).concat([{
+    const blocks = timeOffRequestHeaderBlocks(inputs).concat(inputs.reason).concat([{
       "type": "actions",
       "block_id": "approve-deny-buttons",
       "elements": [

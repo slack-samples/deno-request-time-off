@@ -50,7 +50,7 @@ const formData = CreateTimeOffRequestWorkflow.addStep(
         {
           name: "reason",
           title: "Reason",
-          type: Schema.types.string,
+          type: Schema.slack.types.rich_text,
         },
       ],
     },
