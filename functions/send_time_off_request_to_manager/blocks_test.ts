@@ -1,7 +1,7 @@
-import { assertEquals } from "https://deno.land/std@0.153.0/testing/asserts.ts";
+import { assertEquals } from "@std/assert";
 import timeOffRequestHeaderBlocks from "./blocks.ts";
 
-Deno.test("timeOffRequestHeaderBlocks generates valid blocks for inputs without reason", async () => {
+Deno.test("timeOffRequestHeaderBlocks generates valid blocks for inputs without reason", () => {
   const expectedBlocks = [
     {
       type: "header",
@@ -17,7 +17,7 @@ Deno.test("timeOffRequestHeaderBlocks generates valid blocks for inputs without 
     },
     { type: "section", text: { type: "mrkdwn", text: "*Reason:* N/A" } },
   ];
-  const blocks = await timeOffRequestHeaderBlocks({
+  const blocks = timeOffRequestHeaderBlocks({
     employee: "U12345",
     start_date: "2022-03-01",
     end_date: "2022-03-10",
@@ -25,7 +25,7 @@ Deno.test("timeOffRequestHeaderBlocks generates valid blocks for inputs without 
   assertEquals(blocks, expectedBlocks);
 });
 
-Deno.test("timeOffRequestHeaderBlocks generates valid blocks for full inputs", async () => {
+Deno.test("timeOffRequestHeaderBlocks generates valid blocks for full inputs", () => {
   const expectedBlocks = [
     {
       type: "header",
@@ -44,7 +44,7 @@ Deno.test("timeOffRequestHeaderBlocks generates valid blocks for full inputs", a
       text: { type: "mrkdwn", text: "*Reason:* On vacation!" },
     },
   ];
-  const blocks = await timeOffRequestHeaderBlocks({
+  const blocks = timeOffRequestHeaderBlocks({
     employee: "U12345",
     start_date: "2022-03-01",
     end_date: "2022-03-10",
