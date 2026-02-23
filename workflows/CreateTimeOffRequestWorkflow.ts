@@ -1,4 +1,4 @@
-import { DefineWorkflow, Schema } from "deno-slack-sdk/mod.ts";
+import { DefineWorkflow, Schema } from "@slack/sdk";
 import { SendTimeOffRequestToManagerFunction } from "../functions/send_time_off_request_to_manager/definition.ts";
 
 /**

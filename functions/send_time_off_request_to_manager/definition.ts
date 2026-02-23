@@ -1,4 +1,4 @@
-import { DefineFunction, Schema } from "deno-slack-sdk/mod.ts";
+import { DefineFunction, Schema } from "@slack/sdk";
 /**
  * Custom function that sends a message to the user's manager asking for approval
  * for the time off request. The message includes some Block Kit with two interactive
