@@ -1,5 +1,5 @@
 import { SendTimeOffRequestToManagerFunction } from "./definition.ts";
-import { SlackFunction } from "deno-slack-sdk/mod.ts";
+import { SlackFunction } from "@slack/sdk";
 import { APPROVE_ID, DENY_ID } from "./constants.ts";
 import timeOffRequestHeaderBlocks from "./blocks.ts";
 
